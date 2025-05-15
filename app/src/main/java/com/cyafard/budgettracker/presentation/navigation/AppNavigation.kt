@@ -1,11 +1,11 @@
 package com.cyafard.budgettracker.presentation.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.cyafard.budgettracker.presentation.screen.add.AddScreen
 import com.cyafard.budgettracker.presentation.screen.home.HomeScreen
 import com.cyafard.budgettracker.presentation.screen.splash.SplashScreen
 
@@ -28,7 +28,7 @@ fun AppNavigation(
         }
 
         composable(Screens.Add.route) {
-            Text("Add")
+            AddScreen(modifier = modifier, navController = navController)
         }
     }
 }
