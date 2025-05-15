@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class WalletRepository @Inject constructor(private val dao: TransactionDao) {
+class BudgetRepository @Inject constructor(private val dao: TransactionDao) {
     suspend fun addTransaction(transaction: Transaction) =
         dao.insertTransaction(transaction.toEntity())
 
