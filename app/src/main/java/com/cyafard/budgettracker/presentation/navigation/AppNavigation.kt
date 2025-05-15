@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.cyafard.budgettracker.presentation.screen.home.HomeScreen
 import com.cyafard.budgettracker.presentation.screen.splash.SplashScreen
 
 @Composable
@@ -19,11 +20,11 @@ fun AppNavigation(
         startDestination = "splash"
     ) {
         composable(Screens.Splash.route) {
-            SplashScreen(navController = navController)
+            SplashScreen(modifier = modifier, navController = navController)
         }
 
         composable(Screens.Home.route) {
-            Text("Home")
+            HomeScreen(modifier = modifier, navController = navController)
         }
 
         composable(Screens.Add.route) {
