@@ -1,6 +1,7 @@
 package com.cyafard.budgettracker.presentation.screen.home.component
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.cyafard.budgettracker.domain.model.Transaction
 import com.cyafard.budgettracker.presentation.screen.home.HomeUiEvent
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionCard(
     modifier: Modifier = Modifier,
@@ -21,7 +23,13 @@ fun TransactionCard(
     onEvent: (HomeUiEvent) -> Unit
 ) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(8.dp).clickable {}
+        modifier = modifier.fillMaxWidth().padding(8.dp)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    onEvent(HomeUiEvent.DeleteSingle(transaction))
+                }
+            )
     ) {
         Column(modifier = modifier.padding(16.dp)) {
             Text(text = transaction.title, style = MaterialTheme.typography.titleMedium)

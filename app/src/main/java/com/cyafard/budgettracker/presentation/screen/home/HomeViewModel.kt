@@ -4,6 +4,8 @@ package com.cyafard.budgettracker.presentation.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cyafard.budgettracker.domain.model.Transaction
+import com.cyafard.budgettracker.domain.usecase.DeleteAllTransactions
+import com.cyafard.budgettracker.domain.usecase.DeleteTransaction
 import com.cyafard.budgettracker.domain.usecase.GetTransactions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getTransactions: GetTransactions
+    private val getTransactions: GetTransactions,
+    private val deleteTransaction: DeleteTransaction,
+    private val deleteAllTransactions: DeleteAllTransactions
+
 ): ViewModel() {
     private val _uiState =
         MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -44,6 +49,18 @@ class HomeViewModel @Inject constructor(
             _uiEvent.emit(event)
         }
     }
+
+    fun removeTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteTransaction(transaction)
+        }
+    }
+
+    fun removeAllTransactions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteAllTransactions()
+        }
+    }
 }
 
 sealed class HomeUiState {
@@ -56,4 +73,6 @@ sealed class HomeUiEvent {
     data class NavigateToAdd(val id: Int? = null): HomeUiEvent()
     data class ShowSnackbar(val message: String): HomeUiEvent()
     data class ShareTransaction(val amount: Double): HomeUiEvent()
+    data class DeleteSingle(val transaction: Transaction): HomeUiEvent()
+    object DeleteAll: HomeUiEvent()
 }

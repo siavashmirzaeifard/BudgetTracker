@@ -17,4 +17,7 @@ class BudgetRepository @Inject constructor(private val dao: TransactionDao) {
 
     suspend fun deleteTransaction(transaction: Transaction) =
         dao.deleteTransaction(transaction.toEntity())
+
+    suspend fun deleteAllTransactions() =
+        dao.deleteTransactions()
 }

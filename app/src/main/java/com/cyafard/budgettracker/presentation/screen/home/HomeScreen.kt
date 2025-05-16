@@ -8,11 +8,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +29,7 @@ import com.cyafard.budgettracker.presentation.screen.home.component.ExpenseChart
 import com.cyafard.budgettracker.presentation.screen.home.component.TransactionCard
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -39,11 +44,28 @@ fun HomeScreen(
                 is HomeUiEvent.ShowSnackbar -> {}
                 is HomeUiEvent.NavigateToAdd -> navController.navigate("add")
                 is HomeUiEvent.ShareTransaction -> {}
+                is HomeUiEvent.DeleteAll -> viewModel.removeAllTransactions()
+                is HomeUiEvent.DeleteSingle -> viewModel.removeTransaction(it.transaction)
             }
         }
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Budget Tracker") },
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.onEvent(HomeUiEvent.DeleteAll) }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete all"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.onEvent(HomeUiEvent.NavigateToAdd()) }) {
                 Icon(
