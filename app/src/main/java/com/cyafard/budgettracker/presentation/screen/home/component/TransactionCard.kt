@@ -25,7 +25,9 @@ fun TransactionCard(
     Card(
         modifier = modifier.fillMaxWidth().padding(8.dp)
             .combinedClickable(
-                onClick = {},
+                onClick = {
+                    onEvent(HomeUiEvent.DeleteSingle(transaction))
+                },
                 onLongClick = {
                     onEvent(HomeUiEvent.DeleteSingle(transaction))
                 }

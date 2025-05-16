@@ -15,12 +15,15 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,11 +40,12 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when (it) {
-                is HomeUiEvent.ShowSnackbar -> {}
+                is HomeUiEvent.ShowSnackbar -> { snackbarHostState.showSnackbar(it.message) }
                 is HomeUiEvent.NavigateToAdd -> navController.navigate("add")
                 is HomeUiEvent.ShareTransaction -> {}
                 is HomeUiEvent.DeleteAll -> viewModel.removeAllTransactions()
@@ -73,7 +77,8 @@ fun HomeScreen(
                     contentDescription = "Add a new transaction"
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
         Box(
             modifier = modifier

@@ -53,12 +53,14 @@ class HomeViewModel @Inject constructor(
     fun removeTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteTransaction(transaction)
+            _uiEvent.emit(HomeUiEvent.ShowSnackbar("Transaction deleted"))
         }
     }
 
     fun removeAllTransactions() {
         viewModelScope.launch(Dispatchers.IO) {
             deleteAllTransactions()
+            _uiEvent.emit(HomeUiEvent.ShowSnackbar("All transactions deleted"))
         }
     }
 }
